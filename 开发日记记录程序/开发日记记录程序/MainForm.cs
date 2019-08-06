@@ -19,11 +19,14 @@ namespace 开发日记记录程序
         public MainForm()
         {
             InitializeComponent();
-            Timer t = new Timer();
+            Timer t = new Timer();//设定时间
             t.Interval = 1000;
             t.Tick += new EventHandler(Timer_Tick);
             t.Start();
             label3.Text = DateTime.Now.ToLongDateString().ToString();
+
+            string str = File.ReadAllText("文件路径.txt");
+            textBox1.Text = str;
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -112,6 +115,14 @@ namespace 开发日记记录程序
                 }
             }
             wapp = null;
+
+            string str = textBox1.Text;
+            FileStream fs = new FileStream("文件路径.txt", FileMode.OpenOrCreate);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.Write(str);
+            sw.Close();
+            fs.Close();
+
             DialogResult result = MessageBox.Show("提交成功！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
             if (result == DialogResult.OK)
             {
@@ -122,7 +133,7 @@ namespace 开发日记记录程序
         {
             DialogResult result = MessageBox.Show("你确定要关闭吗！", "提示信息", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             if (result == DialogResult.OK)
-            {
+            {               
                 e.Cancel = false;  //点击OK   
             }
             else
